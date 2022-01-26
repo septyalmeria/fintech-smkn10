@@ -103,22 +103,22 @@ class FirstSeeder extends Seeder
         ]);
 
         //Belanja
-        Transaksi::create([
-            "user_id" => $wahyu->id,
-            "barang_id" => $burger->id,
-            "jumlah" => 2,
-            "invoice_id" => "INV_001",
-            "type" => 2,
-            "status" => 1
-        ]);
+        // Transaksi::create([
+        //     "user_id" => $wahyu->id,
+        //     "barang_id" => $burger->id,
+        //     "jumlah" => 2,
+        //     "invoice_id" => "INV_001",
+        //     "type" => 2,
+        //     "status" => 1
+        // ]);
 
-        Transaksi::create([
-            "user_id" => $wahyu->id,
-            "barang_id" => $oasis->id,
-            "jumlah" => 2,
-            "invoice_id" => "INV_001",
-            "type" => 2,
-            "status" => 1
-        ]);
+        // Transaksi::create([
+        //     "user_id" => $wahyu->id,
+        //     "barang_id" => $oasis->id,
+        //     "jumlah" => 2,
+        //     "invoice_id" => "INV_001",
+        //     "type" => 2,
+        //     "status" => 1
+        // ]);
     }
 }

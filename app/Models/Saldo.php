@@ -13,4 +13,8 @@ class Saldo extends Model
         "user_id",
         "saldo"
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

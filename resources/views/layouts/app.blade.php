@@ -34,20 +34,28 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         @auth
-                        @if(Auth::user()->role_id === 4)
-                        <li class="nav-item">
-                            <a class="nav-link {{ $page == "Home" ? "active" : "" }}" aria-current="page" href="{{ route("home") }}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $page == "Top Up" ? "active" : "" }}" href="{{ route("topup") }}">Top Up</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $page == "Jajan" ? "active" : "" }}" href="{{ route("transaksi") }}">Jajan</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $page == "Riwayat Transaksi" ? "active" : "" }}" href="">Riwayat Transaksi</a>
-                        </li>
-                        @endif
+                            @if(Auth::user()->role_id === 4)
+                            <li class="nav-item">
+                                <a class="nav-link {{ $page == "Home" ? "active" : "" }}" aria-current="page" href="{{ route("home") }}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $page == "Top Up" ? "active" : "" }}" href="{{ route("topup") }}">Top Up</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $page == "Jajan" ? "active" : "" }}" href="{{ route("transaksi") }}">Jajan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $page == "Riwayat Transaksi" ? "active" : "" }}" href="">Riwayat Transaksi</a>
+                            </li>
+                            @endif
+                            @if(Auth::user()->role_id === 3)
+                            <li class="nav-item">
+                                <a class="nav-link {{ $page == "Home" ? "active" : "" }}" aria-current="page" href="{{ route("home") }}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $page == "Menu" ? "active" : "" }}" href="{{ route("menu") }}">Menu</a>
+                            </li>
+                            @endif
                         @endauth
                     </ul>
 

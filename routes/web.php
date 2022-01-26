@@ -3,6 +3,7 @@
 use App\Models\Barang;
 use App\Models\Saldo;
 use App\Models\Transaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -93,25 +94,31 @@ Route::get("jajan/setuju/{invoice_id}", function($invoice_id){
     foreach($transaksis->get() as $transaksi){
         $total_data += ($transaksi->jumlah * $transaksi->barang->price);
     }
-    
-    $saldo = Saldo::where("user_id", Auth::user()->id)->first();
 
-    Saldo::where("user_id", Auth::user()->id)->update([
-        "saldo" => $saldo->saldo - $total_data
-    ]);
-
-    $transaksi->update([
-        "status" => 3
+    $transaksis->update([
+        "status" => 4 //FINISHED
     ]);
 
     return redirect()->back()->with("status", "Jajan disetujui");
 })->name("jajan.setuju");
 
 Route::get("jajan/tolak/{invoice_id}", function($invoice_id){
-    $transaksi = Transaksi::where($invoice_id);
+    $transaksis = Transaksi::where("invoice_id", $invoice_id);
 
-    $transaksi->update([
-        "invoice_id" => null
+    $total_data = 0;
+
+    foreach($transaksis->get() as $transaksi){
+        $total_data += ($transaksi->jumlah * $transaksi->barang->price);
+    }
+
+    $saldo = Saldo::where("user_id", $transaksis->get()[0]->user_id)->first();
+
+    $saldo->update([
+        "saldo" => $saldo->saldo + $total_data
+    ]);
+
+    $transaksis->update([
+        "status" => 5 //REJECTED
     ]);
 
     return redirect()->back()->with("status", "Jajan ditolak");
@@ -132,7 +139,7 @@ Route::post("addToCart/{id}", function(Request $request){
 Route::get("checkout", function(){
     $invoice_id = "INV_" . Auth::user()->id . now()->timestamp;
 
-    Transaksi::where("user_id", Auth::user()->id)->where("type", 2)->update([
+    Transaksi::where("user_id", Auth::user()->id)->where("type", 2)->where("status", 1)->update([
         "invoice_id" => $invoice_id,
         "status" => 2
     ]);
@@ -142,13 +149,24 @@ Route::get("checkout", function(){
 
 Route::get("bayar", function(){
     $datas = Transaksi::where("user_id", Auth::user()->id)
-            ->where("type", 2);
+            ->where("type", 2)
+            ->where("status", 2);
 
     $total_data = 0;
 
     foreach($datas->get() as $data){
         $total_data += ($data->barang->price * $data->jumlah);
     }
+
+    $saldo = Saldo::where("user_id", Auth::user()->id)->first();
+
+    $saldo->update([
+        "saldo" => $saldo->saldo - $total_data
+    ]);
+
+    $datas->update([
+        "status" => 3
+    ]);
 
     return redirect()->back()->with("status", "Berhasil Bayar. Menunggu konfirmasi Kantin");
 })->name("bayar");
@@ -170,6 +188,8 @@ Route::prefix('transaksi')->group(function () {
         foreach($checkouts as $checkout){
             $total_checkout += ($checkout->barang->price * $checkout->jumlah);
         }
+
+        // dd($checkouts);
 
         return view("transaksi", [
             "barangs" => $barangs,
@@ -214,3 +234,47 @@ Route::prefix('transaksi')->group(function () {
         // Matches The "/admin/users" URL
     });
 });
+
+Route::prefix('menu')->group(function () {
+    Route::get("/", function(){
+        $barangs = Barang::all();
+
+        return view("menu", [
+            "barangs" => $barangs
+        ]);
+    })->name("menu");
+
+    Route::post("/add", function(Request $request){
+        Barang::create($request->all());
+
+        return redirect()->back()->with("status", "Berhasil Menambahkan Menu");
+    })->name("menu.add");
+
+    Route::put("/edit/{id}", function(Request $request, $id){
+        Barang::find($id)->update($request->all());
+
+        return redirect()->back()->with("status", "Berhasil Mengedit Menu");
+    })->name("menu.edit");
+
+    Route::get("/delete/{id}", function($id){
+        Barang::find($id)->delete();
+
+        return redirect()->back()->with("status", "Berhasil Menghapus Menu");
+    })->name("menu.delete");
+});
+
+Route::get("/data_user", function(){
+    $users = User::all();
+
+    return view("data_user", [
+        "users" => $users
+    ]);
+})->name("data_user");
+
+Route::get("/data_transaksi", function(){
+    $transaksis = Transaksi::all();
+
+    return view("data_transaksi", [
+        "transaksis" => $transaksis
+    ]);
+})->name("data_transaksi");
