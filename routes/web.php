@@ -6,6 +6,7 @@ use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -263,18 +264,133 @@ Route::prefix('menu')->group(function () {
     })->name("menu.delete");
 });
 
-Route::get("/data_user", function(){
-    $users = User::all();
+Route::prefix('data_user')->group(function () {
+    Route::get("/", function(){
+        $users = User::all();
 
-    return view("data_user", [
-        "users" => $users
-    ]);
-})->name("data_user");
+        return view("data_user", [
+            "users" => $users
+        ]);
+    })->name("data_user");
 
-Route::get("/data_transaksi", function(){
-    $transaksis = Transaksi::all();
+    Route::post("/add", function(Request $request){
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:4', 'confirmed'],
+            'role_id' => ['required', 'numeric']
+        ]);
 
-    return view("data_transaksi", [
-        "transaksis" => $transaksis
-    ]);
-})->name("data_transaksi");
+        $user = User::create([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "role_id" => $request->role_id
+        ]);
+
+        if($user->role_id == 4){
+            Saldo::create([
+                "user_id" => $user->id,
+                "saldo" => 0
+            ]);
+        }
+
+        return redirect()->back()->with("status", "Berhasil Menambahkan User");
+    })->name("data_user.add");
+
+    Route::put("/edit/{id}", function(Request $request, $id){
+        if($request->password == null){
+            User::find($id)->update([
+                "name" => $request->name,
+                "email" => $request->email,
+                "role_id" => $request->role_id
+            ]);
+
+            return redirect()->back()->with("status", "Berhasil Mengedit User");
+        }
+
+        User::find($id)->update([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "role_id" => $request->role_id
+        ]);
+
+        return redirect()->back()->with("status", "Berhasil Mengedit User");
+    })->name("data_user.edit");
+
+    Route::get("/delete/{id}", function($id){
+        $user = User::find($id);
+
+        Saldo::where("user_id", $user->id)->delete();
+
+        $user->delete();
+
+        return redirect()->back()->with("status", "Berhasil Menghapus User & Saldo");
+    })->name("data_user.delete");
+});
+
+Route::prefix('data_transaksi')->group(function () {
+    Route::get("/", function(){
+        $details = Transaksi::where("type", 2)
+                        ->get();
+
+        $transaksis = Transaksi::where('type', 2)
+                        ->groupBy('invoice_id')
+                        ->get();
+
+        return view("data_transaksi", [
+            "transaksis" => $transaksis,
+            "details" => $details,
+        ]);
+    })->name("data_transaksi");
+
+    Route::post("/add", function(Request $request){
+        $user = User::create([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "role_id" => $request->role_id
+        ]);
+
+        if($user->role_id == 4){
+            Saldo::create([
+                "user_id" => $user->id,
+                "saldo" => 0
+            ]);
+        }
+
+        return redirect()->back()->with("status", "Berhasil Menambahkan User");
+    })->name("data_transaksi.add");
+
+    Route::put("/edit/{id}", function(Request $request, $id){
+        if($request->password == null){
+            User::find($id)->update([
+                "name" => $request->name,
+                "email" => $request->email,
+                "role_id" => $request->role_id
+            ]);
+
+            return redirect()->back()->with("status", "Berhasil Mengedit User");
+        }
+
+        User::find($id)->update([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "role_id" => $request->role_id
+        ]);
+
+        return redirect()->back()->with("status", "Berhasil Mengedit User");
+    })->name("data_transaksi.edit");
+
+    Route::get("/delete/{id}", function($id){
+        $user = User::find($id);
+
+        Saldo::where("user_id", $user->id)->delete();
+
+        $user->delete();
+
+        return redirect()->back()->with("status", "Berhasil Menghapus User & Saldo");
+    })->name("data_transaksi.delete");
+});
