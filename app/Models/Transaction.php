@@ -5,24 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Transaksi extends Model
+class Transaction extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         "user_id",
-        "barang_id",
-        "jumlah",
+        "item_id",
+        "quantity",
         "invoice_id",
         "type",
         "status"
     ];
 
-    public function barang(){
-        return $this->belongsTo(Barang::class);
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

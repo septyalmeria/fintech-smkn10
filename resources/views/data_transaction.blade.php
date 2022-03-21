@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 <?php
-$page = "Data Transaksi";
+$page = "Data Transaction";
 ?>
 
 @section('content')
@@ -22,18 +22,18 @@ $page = "Data Transaksi";
                         <div class="col d-flex justify-content-end">
                             {{-- <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambah">
-                                Tambah Transaksi
+                                Tambah transaction
                             </button>
-                            
+
                             <!-- Modal -->
                             <div class="modal fade" id="tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Tambah Transaksi</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Tambah transaction</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form method="POST" action="{{ route("data_transaksi.add") }}">
+                                    <form method="POST" action="{{ route("data_transaction.add") }}">
                                     @csrf
                                     <div class="modal-body">
                                         <div class="form-group">
@@ -100,7 +100,7 @@ $page = "Data Transaksi";
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -111,55 +111,55 @@ $page = "Data Transaksi";
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($transaksis as $key => $transaksi)
+                            @foreach ($transactions as $key => $transaction)
                                 <tr>
                                     <td>{{ $key+1 }}</td>
-                                    <td>{{ $transaksi->user->name }}</td>
-                                    <td>{{ $transaksi->invoice_id }}</td>
+                                    <td>{{ $transaction->user->name }}</td>
+                                    <td>{{ $transaction->invoice_id }}</td>
                                     <td>
-                                      @if($transaksi->status == 1)
+                                      @if($transaction->status == 1)
                                         ON CART
                                       @endif
-                                      @if($transaksi->status == 2)
+                                      @if($transaction->status == 2)
                                         PENDING
                                       @endif
-                                      @if($transaksi->status == 3)
+                                      @if($transaction->status == 3)
                                         COMPLETED
                                       @endif
-                                      @if($transaksi->status == 4)
+                                      @if($transaction->status == 4)
                                         FINISHED
                                       @endif
                                     </td>
                                     <td>
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#detail-{{ $transaksi->invoice_id }}">
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#detail-{{ $transaction->invoice_id }}">
                                             Detail
                                         </button>
-                                        
+
                                         <!-- Modal -->
-                                        <div class="modal fade" id="detail-{{ $transaksi->invoice_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="detail-{{ $transaction->invoice_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Detail Transaksi #{{ $transaksi->invoice_id }}</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Detail Transaksi #{{ $transaction->invoice_id }}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Nama User: {{ $transaksi->user->name }} <br/>
-                                                    Status: 
-                                                    @if($transaksi->status == 1)
+                                                    Nama User: {{ $transaction->user->name }} <br/>
+                                                    Status:
+                                                    @if($transaction->status == 1)
                                                       ON CART
                                                     @endif
-                                                    @if($transaksi->status == 2)
+                                                    @if($transaction->status == 2)
                                                       PENDING
                                                     @endif
-                                                    @if($transaksi->status == 3)
+                                                    @if($transaction->status == 3)
                                                       COMPLETED
                                                     @endif
-                                                    @if($transaksi->status == 4)
+                                                    @if($transaction->status == 4)
                                                       FINISHED
                                                     @endif
-                                                    <table class="table table-bordered">
+                                                    <table class="table table-bordered table-hover">
                                                       <thead>
                                                         <tr>
                                                           <th>Nama Pesanan</th>
@@ -171,13 +171,13 @@ $page = "Data Transaksi";
                                                       <tbody>
                                                         <?php $total_harga = 0; ?>
                                                         @foreach ($details as $detail)
-                                                          @if($detail->invoice_id == $transaksi->invoice_id)
-                                                            <?php $total_harga += $detail->jumlah * $detail->barang->price; ?>
+                                                          @if($detail->invoice_id == $transaction->invoice_id)
+                                                            <?php $total_harga += $detail->quantity * $detail->item->price; ?>
                                                             <tr>
-                                                              <td>{{ $detail->barang->name }}</td>
-                                                              <td>{{ $detail->jumlah }}</td>
-                                                              <td>{{ $detail->barang->price }}</td>
-                                                              <td>{{ $detail->jumlah * $detail->barang->price }}</td>
+                                                              <td>{{ $detail->item->name }}</td>
+                                                              <td>{{ $detail->quantity }}</td>
+                                                              <td>{{ $detail->item->price }}</td>
+                                                              <td>{{ $detail->quantity * $detail->item->price }}</td>
                                                             </tr>
                                                           @endif
                                                         @endforeach
@@ -192,26 +192,26 @@ $page = "Data Transaksi";
                                             </div>
                                         </div>
 
-                                        
+
                                         {{-- <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-{{ $transaksi->id }}">
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-{{ $transaction->id }}">
                                             Hapus
                                         </button>
-                                        
+
                                         <!-- Modal -->
-                                        <div class="modal fade" id="delete-{{ $transaksi->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="delete-{{ $transaction->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Hapus Transaksi {{ $transaksi->name }}</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Hapus transaction {{ $transaction->name }}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Apakah Anda yakin ingin menghapus user {{ $transaksi->name }}?
+                                                    Apakah Anda yakin ingin menghapus user {{ $transaction->name }}?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                                                    <a href="{{ route("data_transaksi.delete", ["id" => $transaksi->id]) }}" type="submit" class="btn btn-primary">Ya</a>
+                                                    <a href="{{ route("data_transaction.delete", ["id" => $transaction->id]) }}" type="submit" class="btn btn-primary">Ya</a>
                                                 </div>
                                             </div>
                                             </div>
@@ -221,12 +221,11 @@ $page = "Data Transaksi";
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-
-                <div class="footer">
-                  <button type="button" class="btn btn-primary" onclick="window.print()">
-                    PRINT
-                  </button>
+                    <div class="footer">
+                        <button type="button" class="btn btn-primary" onclick="window.print()">
+                          PRINT
+                        </button>
+                      </div>
                 </div>
             </div>
         </div>

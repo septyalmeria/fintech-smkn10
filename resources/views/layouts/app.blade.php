@@ -42,7 +42,7 @@
                                 <a class="nav-link {{ $page == "Top Up" ? "active" : "" }}" href="{{ route("topup") }}">Top Up</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ $page == "Jajan" ? "active" : "" }}" href="{{ route("transaksi") }}">Jajan</a>
+                                <a class="nav-link {{ $page == "Jajan" ? "active" : "" }}" href="{{ route("transaction") }}">Jajan</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ $page == "Riwayat Transaksi" ? "active" : "" }}" href="">Riwayat Transaksi</a>

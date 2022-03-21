@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,16 +27,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $pengajuans = Transaksi::where("type", 1)
-                        ->where("status", 2)
-                        ->get();
+        $pengajuans = Transaction::where("type", 1)
+            ->where("status", 2)
+            ->get();
 
-        $pengajuan_jajans = Transaksi::where("type", 2)
-                        ->get();
+        $pengajuan_jajans = Transaction::where("type", 2)
+            ->get();
 
-        $jajan_by_invoices = Transaksi::where('type', 2)
-                        ->groupBy('invoice_id')
-                        ->get();
+        $jajan_by_invoices = Transaction::where('type', 2)
+            ->groupBy('invoice_id')
+            ->get();
 
         // dd($jajan_by_invoices);
 

@@ -9,7 +9,7 @@ $page = "Top Up";
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Top Up') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -18,17 +18,39 @@ $page = "Top Up";
                         </div>
                     @endif
 
-                    Saldo: {{ $saldo->saldo }}
-
-                    <form method="POST" action="{{ route("transaksi.create") }}">
-                        @csrf
-                        <div class="form-group">
-                            <label>Jumlah</label>
-                            <input type="number" name="jumlah" class="form-control" placeholder="Masukkan nominal">
-                            <input type="hidden" name="type" value="1">
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <div class="col col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        Saldo : Rp. {{ $saldo->saldo }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button class="btn btn-primary" type="submit">Top Up</button>
-                    </form>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <div class="col col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <form method="POST" action="{{ route("transaction.create") }}">
+                                            @csrf
+                                            <div class="form-group mb-2">
+                                                <label class="mb-2">Jumlah</label>
+                                                <input type="number" name="quantity" class="form-control" placeholder="Masukkan nominal">
+                                                <input type="hidden" name="type" value="1">
+                                            </div>
+                                            <div class=" d-grid gap-2 col-6 mx-auto">
+                                                <button class="btn btn-primary" type="submit">Top Up</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

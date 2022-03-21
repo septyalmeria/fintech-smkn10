@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Balance;
 use App\Models\Saldo;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -72,7 +73,7 @@ class RegisterController extends Controller
             'role_id' => 4
         ]);
 
-        Saldo::create([
+        Balance::create([
             "user_id" => $user->id,
             "saldo" => 0
         ]);

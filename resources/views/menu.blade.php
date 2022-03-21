@@ -24,7 +24,7 @@ $page = "Menu";
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambah">
                                 Tambah Menu
                             </button>
-                            
+
                             <!-- Modal -->
                             <div class="modal fade" id="tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -36,6 +36,10 @@ $page = "Menu";
                                     <form method="POST" action="{{ route("menu.add") }}">
                                     @csrf
                                     <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="formFile" class="form-label">Gambar</label>
+                                            <input class="form-control" type="file" id="formFile" name="image">
+                                        </div>
                                         <div class="form-group">
                                             <label>Nama</label>
                                             <input type="text" class="form-control" name="name">
@@ -66,10 +70,11 @@ $page = "Menu";
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>No.</th>
+                                <th>Gambar</th>
                                 <th>Nama Menu</th>
                                 <th>Deskripsi</th>
                                 <th>Harga</th>
@@ -78,46 +83,53 @@ $page = "Menu";
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($barangs as $key => $barang)
+                            @foreach ($items as $key => $item)
                                 <tr>
                                     <td>{{ $key+1 }}</td>
-                                    <td>{{ $barang->name }}</td>
-                                    <td>{{ $barang->desc }}</td>
-                                    <td>{{ $barang->price }}</td>
-                                    <td>{{ $barang->stock }}</td>
+                                    <td>
+                                        <img width="100" height="75" src={{ asset('assets/images/' . $item->image) }} alt="not found" />
+                                    </td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->desc }}</td>
+                                    <td>{{ $item->price }}</td>
+                                    <td>{{ $item->stock }}</td>
                                     <td>
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit-{{ $barang->id }}">
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit-{{ $item->id }}">
                                             Edit
                                         </button>
-                                        
+
                                         <!-- Modal -->
-                                        <div class="modal fade" id="edit-{{ $barang->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="edit-{{ $item->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Edit Menu {{ $barang->name }}</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Edit Menu {{ $item->name }}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form method="POST" action="{{ route("menu.edit", ["id" => $barang->id]) }}">
+                                                <form method="POST" action="{{ route("menu.edit", ["id" => $item->id]) }}">
                                                     @method("put")
                                                     @csrf
                                                 <div class="modal-body">
                                                     <div class="form-group">
+                                                        <label for="formFile" class="form-label">Gambar</label>
+                                                        <input class="form-control" type="file" id="formFile" name="image">
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label>Nama</label>
-                                                        <input type="text" class="form-control" name="name" value="{{ $barang->name }}">
+                                                        <input type="text" class="form-control" name="name" value="{{ $item->name }}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Deskripsi</label>
-                                                        <input type="text" class="form-control" name="desc" value="{{ $barang->desc }}">
+                                                        <input type="text" class="form-control" name="desc" value="{{ $item->desc }}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Harga</label>
-                                                        <input type="number" class="form-control" name="price" value="{{ $barang->price }}">
+                                                        <input type="number" class="form-control" name="price" value="{{ $item->price }}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Stok</label>
-                                                        <input type="number" class="form-control" name="stock" value="{{ $barang->stock }}">
+                                                        <input type="number" class="form-control" name="stock" value="{{ $item->stock }}">
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -129,26 +141,26 @@ $page = "Menu";
                                             </div>
                                         </div>
 
-                                        
+
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-{{ $barang->id }}">
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-{{ $item->id }}">
                                             Hapus
                                         </button>
-                                        
+
                                         <!-- Modal -->
-                                        <div class="modal fade" id="delete-{{ $barang->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="delete-{{ $item->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Hapus Menu {{ $barang->name }}</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Hapus Menu {{ $item->name }}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Apakah Anda yakin ingin menghapus menu {{ $barang->name }}?
+                                                    Apakah Anda yakin ingin menghapus menu {{ $item->name }}?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-                                                    <a href="{{ route("menu.delete", ["id" => $barang->id]) }}" type="submit" class="btn btn-primary">Ya</a>
+                                                    <a href="{{ route("menu.delete", ["id" => $item->id]) }}" type="submit" class="btn btn-primary">Ya</a>
                                                 </div>
                                             </div>
                                             </div>

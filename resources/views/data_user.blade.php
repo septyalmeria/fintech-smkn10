@@ -24,7 +24,7 @@ $page = "Data User";
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambah">
                                 Tambah User
                             </button>
-                            
+
                             <!-- Modal -->
                             <div class="modal fade" id="tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -100,7 +100,7 @@ $page = "Data User";
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -124,7 +124,7 @@ $page = "Data User";
                                         <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#edit-{{ $user->id }}">
                                             Edit
                                         </button>
-                                        
+
                                         <!-- Modal -->
                                         <div class="modal fade" id="edit-{{ $user->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -173,12 +173,12 @@ $page = "Data User";
                                             </div>
                                         </div>
 
-                                        
+
                                         <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-{{ $user->id }}">
                                             Hapus
                                         </button>
-                                        
+
                                         <!-- Modal -->
                                         <div class="modal fade" id="delete-{{ $user->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">

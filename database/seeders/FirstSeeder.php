@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Barang;
+use App\Models\Balance;
+use App\Models\Item;
 use App\Models\Role;
-use App\Models\Saldo;
-use App\Models\Transaksi;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,100 +22,97 @@ class FirstSeeder extends Seeder
         $admin = Role::create(["name" => "Administrator"]);
         $bank_mini = Role::create(["name" => "Bank Mini"]);
         $kantin = Role::create(["name" => "Kantin"]);
-        $siswa = Role::create(["name" => "Siswa"]);
+        $customer = Role::create(["name" => "Siswa"]);
 
         User::create([
-            "name" => "Mujahid",
-            "email" => "mujahidrs@gmail.com",
-            "password" => Hash::make("mujahidrs"),
+            "name" => "Fadiah Ahmad",
+            "email" => "fadiah@gmail.com",
+            "password" => Hash::make("fadiah"),
             "role_id" => $admin->id
         ]);
 
         User::create([
-            "name" => "Rui",
-            "email" => "rui@gmail.com",
-            "password" => Hash::make("rui"),
+            "name" => "Bella Mustika",
+            "email" => "bella@gmail.com",
+            "password" => Hash::make("bella"),
             "role_id" => $kantin->id
         ]);
 
         User::create([
-            "name" => "Azizah",
-            "email" => "azizah@gmail.com",
-            "password" => Hash::make("azizah"),
+            "name" => "Keren Matilda",
+            "email" => "keren@gmail.com",
+            "password" => Hash::make("keren"),
             "role_id" => $bank_mini->id
         ]);
 
-        $wahyu = User::create([
-            "name" => "Wahyu",
-            "email" => "wahyu@gmail.com",
-            "password" => Hash::make("wahyu"),
-            "role_id" => $siswa->id
+        $septy = User::create([
+            "name" => "Septy Almeria",
+            "email" => "septy@gmail.com",
+            "password" => Hash::make("septy"),
+            "role_id" => $customer->id
         ]);
 
-        $piscok = Barang::create([
-            "name" => "Piscok",
-            "price" => 2500,
-            "stock" => 50,
-            "desc" => "Pisang Cokelat"
-        ]);
-
-        $risol = Barang::create([
-            "name" => "Risol",
-            "price" => 3000,
-            "stock" => 50,
-            "desc" => "Risol Aja"
-        ]);
-
-        $burger = Barang::create([
+        $burger = Item::create([
+            "image" => "burger.png",
             "name" => "Burger",
             "price" => 6000,
-            "stock" => 50,
-            "desc" => "Burger Daging Tipis"
+            "stock" => 25,
+            "desc" => "Roti dan Daging"
         ]);
 
-        $oasis = Barang::create([
-            "name" => "Oasis",
-            "price" => 2000,
-            "stock" => 50,
-            "desc" => "Minuman"
+        $risol = Item::create([
+            "image" => "risol.png",
+            "name" => "Risol",
+            "price" => 12000,
+            "stock" => 25,
+            "desc" => "Risol Mayones"
         ]);
 
-        $teh_pucuk = Barang::create([
-            "name" => "Teh Pucuk",
-            "price" => 3500,
-            "stock" => 50,
-            "desc" => "Minuman teh"
+        $teh_botol = Item::create([
+            "image" => "teh_botol.png",
+            "name" => "Teh Botol",
+            "price" => 5000,
+            "stock" => 25,
+            "desc" => "Teh Botol"
         ]);
 
-        Saldo::create([
-            "user_id" => $wahyu->id,
+        $aqua = Item::create([
+            "image" => "aqua.png",
+            "name" => "Aqua",
+            "price" => 3000,
+            "stock" => 25,
+            "desc" => "Air Mineral"
+        ]);
+
+        Balance::create([
+            "user_id" => $septy->id,
             "saldo" => 50000
         ]);
 
         //Isi Saldo
-        Transaksi::create([
-            "user_id" => $wahyu->id,
-            "barang_id" => null,
-            "jumlah" => 50000,
+        Transaction::create([
+            "user_id" => $septy->id,
+            "item_id" => null,
+            "quantity" => 50000,
             "invoice_id" => "SAL_001",
             "type" => 1,
             "status" => 3
         ]);
 
         //Belanja
-        // Transaksi::create([
-        //     "user_id" => $wahyu->id,
-        //     "barang_id" => $burger->id,
-        //     "jumlah" => 2,
+        // Transaction::create([
+        //     "user_id" => $septy->id,
+        //     "item_id" => $burger->id,
+        //     "quantity" => 2,
         //     "invoice_id" => "INV_001",
         //     "type" => 2,
         //     "status" => 1
         // ]);
 
-        // Transaksi::create([
-        //     "user_id" => $wahyu->id,
-        //     "barang_id" => $oasis->id,
-        //     "jumlah" => 2,
+        // Transaction::create([
+        //     "user_id" => $septy->id,
+        //     "item_id" => $aqua->id,
+        //     "quantity" => 2,
         //     "invoice_id" => "INV_001",
         //     "type" => 2,
         //     "status" => 1

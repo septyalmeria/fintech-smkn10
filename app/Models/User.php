@@ -43,16 +43,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo(Role::class);
     }
 
-    public function transaksis(){
-        return $this->hasMany(Transaksi::class);
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 
-    public function saldo(){
-        return $this->hasOne(Saldo::class);
+    public function saldo()
+    {
+        return $this->hasOne(Balance::class);
     }
-    
 }
